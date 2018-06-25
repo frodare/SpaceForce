@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceForce.Desktop.entities;
@@ -7,14 +8,12 @@ namespace SpaceForce.Desktop {
 	public class Game1 : Game {
 		private GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
+  
+		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
-		private Texture2D background;
-		private Texture2D ship;
-		private Texture2D asteriod;
-
-		private Asteroid ast1;
 
 		private float angle = 0;
+
 
 		public Game1() {
 			graphics = new GraphicsDeviceManager(this);
@@ -23,14 +22,22 @@ namespace SpaceForce.Desktop {
 
 		protected override void Initialize() {
 			base.Initialize();
-			ast1 = new Asteroid(asteriod,  new Vector2(0));
+
+		}
+
+		private void loadTexture(string name) {
+			textures.Add(name, Content.Load<Texture2D>(name));
+		}
+
+		private void loadTextures() {
+			loadTexture("Background/starBackground");
+			loadTexture("player");
+			loadTexture("meteorSmall");
 		}
 
 		protected override void LoadContent() {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			background = Content.Load<Texture2D>("Background/starBackground");
-			ship = Content.Load<Texture2D>("player");
-			asteriod = Content.Load<Texture2D>("meteorSmall");
+			loadTextures();
 		}
 
 		protected override void UnloadContent() {
@@ -40,11 +47,12 @@ namespace SpaceForce.Desktop {
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
+
+
 			// TODO: Add your update logic here
 
 			angle += 0.01f;
 
-			ast1.Update(gameTime);
 
 			base.Update(gameTime);
       
@@ -54,14 +62,14 @@ namespace SpaceForce.Desktop {
 			GraphicsDevice.Clear(Color.Beige);
 			spriteBatch.Begin();
 
-			spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
-			spriteBatch.Draw(ship, new Vector2(400, 240), Color.White);
+			spriteBatch.Draw(textures["Background/starBackground"], new Rectangle(0, 0, 800, 480), Color.White);
+			spriteBatch.Draw(textures["player"], new Vector2(400, 240), Color.White);
 
-			Rectangle sourceRectangle = new Rectangle(0, 0, asteriod.Width, asteriod.Height);
-			spriteBatch.Draw(asteriod, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteriod.Width / 2, 0 + asteriod.Height / 2), 1.0f, SpriteEffects.None, 1);
+			Texture2D asteroid = textures["meteorSmall"];
 
-			ast1.Draw(gameTime, spriteBatch);
-
+			Rectangle sourceRectangle = new Rectangle(0, 0, asteroid.Width, asteroid.Height);
+			spriteBatch.Draw(asteroid, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteroid.Width / 2, 0 + asteroid.Height / 2), 1.0f, SpriteEffects.None, 1);
+   
 			spriteBatch.End();
 
 			base.Draw(gameTime);
