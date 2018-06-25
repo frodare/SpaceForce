@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceForce.Desktop.entities;
 
 namespace SpaceForce.Desktop {
 	public class Game1 : Game {
@@ -11,6 +12,8 @@ namespace SpaceForce.Desktop {
 		private Texture2D ship;
 		private Texture2D asteriod;
 
+		private Asteroid ast1;
+
 		private float angle = 0;
 
 		public Game1() {
@@ -20,6 +23,7 @@ namespace SpaceForce.Desktop {
 
 		protected override void Initialize() {
 			base.Initialize();
+			ast1 = new Asteroid(asteriod,  new Vector2(0));
 		}
 
 		protected override void LoadContent() {
@@ -40,7 +44,10 @@ namespace SpaceForce.Desktop {
 
 			angle += 0.01f;
 
+			ast1.Update(gameTime);
+
 			base.Update(gameTime);
+      
 		}
 
 		protected override void Draw(GameTime gameTime) {
@@ -52,6 +59,8 @@ namespace SpaceForce.Desktop {
 
 			Rectangle sourceRectangle = new Rectangle(0, 0, asteriod.Width, asteriod.Height);
 			spriteBatch.Draw(asteriod, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteriod.Width / 2, 0 + asteriod.Height / 2), 1.0f, SpriteEffects.None, 1);
+
+			ast1.Draw(gameTime, spriteBatch);
 
 			spriteBatch.End();
 
