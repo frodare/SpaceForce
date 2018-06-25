@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework.Input;
 namespace SpaceForce.Desktop {
 	public class Game1 : Game {
 		private GraphicsDeviceManager graphics;
-    private SpriteBatch spriteBatch;
+		private SpriteBatch spriteBatch;
 
 		private Texture2D background;
-    private Texture2D ship;
-    private Texture2D asteriod;
+		private Texture2D ship;
+		private Texture2D asteriod;
 
 		private float angle = 0;
 
@@ -47,13 +47,13 @@ namespace SpaceForce.Desktop {
 			GraphicsDevice.Clear(Color.Beige);
 			spriteBatch.Begin();
 
-      spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
+			spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
 			spriteBatch.Draw(ship, new Vector2(400, 240), Color.White);
 
 			Rectangle sourceRectangle = new Rectangle(0, 0, asteriod.Width, asteriod.Height);
-			spriteBatch.Draw(asteriod, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteriod.Width/2, 0 + asteriod.Height /2), 1.0f, SpriteEffects.None, 1);
+			spriteBatch.Draw(asteriod, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteriod.Width / 2, 0 + asteriod.Height / 2), 1.0f, SpriteEffects.None, 1);
 
-      spriteBatch.End();
+			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
