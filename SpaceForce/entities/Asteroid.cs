@@ -16,6 +16,10 @@ namespace SpaceForce.Desktop.entities {
 			base.Update(gameTime);
 		}
 
+		public override void onCollide(Entity foreignEntity) {
+			Dead = true;
+		}
+
 		protected override Texture2D[] GetTextures() {
 			return new Texture2D[] { game.textures["meteorSmall"] };
 		}

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using SpaceForce.Desktop.entities;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using System;
 
 /**
  * 
@@ -22,12 +23,17 @@ namespace SpaceForce.Desktop {
 		private Song song;
 		private int cleanupCounter = 0;
 
+		internal List<Entity> entities = new List<Entity>();
+    // TODO need to override add entity and queue new entities up until update is complete
+
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 		internal Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
 		private AsteroidPool asteroidPool;
 		private LaserPool laserPool;
 		private Player player;
+
+		public Texture2D spot;
     
 		public SpaceForceGame() {
 			graphics = new GraphicsDeviceManager(this);
@@ -52,6 +58,8 @@ namespace SpaceForce.Desktop {
 			LoadTexture("meteorSmall");
 			LoadTexture("laserRed");
 			LoadTexture("laserGreen");
+
+			spot = CreateCircleText(3);
    
 			sounds.Add("laser", Content.Load<SoundEffect>("laser"));
 
@@ -60,6 +68,7 @@ namespace SpaceForce.Desktop {
 			}
 
 			player = new Player(this, laserPool);
+			entities.Add(player);
       player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
 		}
     
@@ -84,10 +93,11 @@ namespace SpaceForce.Desktop {
 				Exit();
 				return;
 			}
-
-			player.Update(gameTime);
-			asteroidPool.Update(gameTime);
-			laserPool.Update(gameTime);
+   
+			HandleCollisions();
+			foreach (var e in entities) {
+        e.Update(gameTime);
+      }
 			cleanupCounter++;
       
 			if (cleanupCounter > 100) {
@@ -98,16 +108,52 @@ namespace SpaceForce.Desktop {
 			base.Update(gameTime);
 		}
 
+		private void HandleCollisions() {
+			foreach (var e1 in entities) {
+				if (e1.Dead) continue;
+				foreach (var e2 in entities) {
+					if (e2.Dead || object.ReferenceEquals(e1, e2)) continue;
+					if (e1.isCollidingWith(e2)) {
+						e1.onCollide(e2);
+						e2.onCollide(e1);
+					}
+        }
+      }
+		}
+
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin();
-	   
-			asteroidPool.Draw(gameTime, spriteBatch);
-			laserPool.Draw(gameTime, spriteBatch);
-			player.Draw(gameTime, spriteBatch);
-
+			spriteBatch.Begin();   
+			foreach (var e in entities) {
+				e.Draw(gameTime, spriteBatch);
+			}   
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
+
+
+		private Texture2D CreateCircleText(int radius) {
+      Texture2D texture = new Texture2D(GraphicsDevice, radius, radius);
+      Color[] colorData = new Color[radius * radius];
+
+      float diam = radius / 2f;
+      float diamsq = diam * diam;
+
+      for (int x = 0; x < radius; x++) {
+        for (int y = 0; y < radius; y++) {
+          int index = x * radius + y;
+          Vector2 pos = new Vector2(x - diam, y - diam);
+          if (pos.LengthSquared() <= diamsq) {
+            colorData[index] = Color.Red;
+          } else {
+            colorData[index] = Color.Transparent;
+          }
+        }
+      }
+
+      texture.SetData(colorData);
+      return texture;
+    }
+
 	}
 }

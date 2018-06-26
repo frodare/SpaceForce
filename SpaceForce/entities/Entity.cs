@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceForce.Desktop.entities {
- 
+
 	public abstract class Entity {
 
 		private Texture2D[] textures;
-		private Rectangle size;
+		private Rectangle textureSize;
 		private Vector2 origin;
 
 		public Vector2 pos;
@@ -15,6 +16,9 @@ namespace SpaceForce.Desktop.entities {
 
 		public float rotVel;
 		public float rot;
+
+		public int size;
+		public double sqHalfSize;
 
 		protected SpaceForceGame game;
 		protected int textureIndex = 0;
@@ -27,8 +31,23 @@ namespace SpaceForce.Desktop.entities {
 			this.game = game;
 			textures = GetTextures();
 			Texture2D texture = textures[0];
-            size = new Rectangle(0, 0, texture.Width, texture.Height);
-            origin = new Vector2(0 + texture.Width / 2, 0 + texture.Height / 2);
+			textureSize = new Rectangle(0, 0, texture.Width, texture.Height);
+			origin = new Vector2(0 + texture.Width / 2, 0 + texture.Height / 2);
+			SetSize(MathHelper.Max(textureSize.Bottom, textureSize.Width));
+		}
+
+		protected void SetSize(int size) {
+			this.size = size;
+      sqHalfSize = Math.Pow(size / 2, 2);
+		}
+
+		public bool isCollidingWith(Entity foreignEntity) {
+			float distanceSq = (pos - foreignEntity.pos).LengthSquared();
+			return distanceSq < (sqHalfSize + foreignEntity.sqHalfSize);
+		}
+
+		public virtual void onCollide(Entity foreignEntity) {
+
 		}
 
 		public void Freeze() {
@@ -38,7 +57,7 @@ namespace SpaceForce.Desktop.entities {
 			rot = 0;
 			rotVel = 0;
 		}
-    
+
 		public void SetState(Vector2 pos, Vector2 vel, Vector2 acc, float rot, float rotVel) {
 			this.pos = pos;
 			this.vel = vel;
@@ -48,26 +67,34 @@ namespace SpaceForce.Desktop.entities {
 		}
 
 		protected bool IsOffScreen() {
-      int w = game.graphics.GraphicsDevice.DisplayMode.Width;
-      int h = game.graphics.GraphicsDevice.DisplayMode.Height;
-      return pos.X > w || pos.Y > h || pos.X < 0 || pos.Y < 0;
-    }
+			int w = game.graphics.GraphicsDevice.DisplayMode.Width;
+			int h = game.graphics.GraphicsDevice.DisplayMode.Height;
+			return pos.X > w || pos.Y > h || pos.X < 0 || pos.Y < 0;
+		}
 
 		public void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
 			if (Dead) {
 				return;
 			}
-			spriteBatch.Draw(textures[textureIndex], pos, size, Color.White, rot, origin, 1.0f, SpriteEffects.None, 1);
+			spriteBatch.Draw(textures[textureIndex], pos, textureSize, Color.White, rot, origin, 1.0f, SpriteEffects.None, 1);
+
+			spriteBatch.Draw(game.spot, pos, Color.White);
+
+			spriteBatch.Draw(game.spot, pos + new Vector2(size / 2, 0), Color.White);
+			spriteBatch.Draw(game.spot, pos + new Vector2(-size / 2, 0), Color.White);
+			spriteBatch.Draw(game.spot, pos + new Vector2(0, size / 2), Color.White);
+			spriteBatch.Draw(game.spot, pos + new Vector2(0, -size / 2), Color.White);
 		}
 
 		public virtual void Update(GameTime gameTime) {
 			if (Dead) {
-        return;
-      }
+				return;
+			}
 			vel += acc;
 			pos += vel;
 			rot += rotVel;
 		}
 
 	}
+
 }

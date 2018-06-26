@@ -18,6 +18,7 @@ namespace SpaceForce.Desktop.entities {
 			if (entity == null) {
 				entity = NewInstance();
 				pool.Add(entity);
+				game.entities.Add(entity);
 			}
 			Init(entity);
 			return entity;
@@ -48,7 +49,6 @@ namespace SpaceForce.Desktop.entities {
 			foreach (var entity in pool) {
 				entity.Update(gameTime);
       }
-    }
-
+    }  
   }
 }
