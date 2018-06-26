@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using SpaceForce.Desktop.entities;
 
 namespace SpaceForce.Desktop {
-	public class Game1 : Game {
+	public class SpaceForceGame : Game {
 		private GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
   

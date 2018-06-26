@@ -43,10 +43,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="SpaceForceGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="entities\Asteroid.cs" />
-    <Compile Include="entities\BaseEntity.cs" />
+    <Compile Include="entities\Entity.cs" />
+    <Compile Include="entities\EntityPool.cs" />
+    <Compile Include="entities\AsteroidPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
