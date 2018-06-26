@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceForce.Desktop.entities;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 /**
  * 
@@ -20,7 +21,9 @@ namespace SpaceForce.Desktop {
 		private SpriteBatch spriteBatch;
 		private Song song;
 		private int cleanupCounter = 0;
+
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+		internal Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
 		private AsteroidPool asteroidPool;
 		private LaserPool laserPool;
@@ -50,6 +53,8 @@ namespace SpaceForce.Desktop {
 			LoadTexture("laserRed");
 			LoadTexture("laserGreen");
    
+			sounds.Add("laser", Content.Load<SoundEffect>("laser"));
+
 			for (int i = 0; i < 10; i++) {
 				asteroidPool.New();
 			}
