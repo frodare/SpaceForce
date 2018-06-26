@@ -49,6 +49,9 @@
     <Compile Include="entities\Entity.cs" />
     <Compile Include="entities\EntityPool.cs" />
     <Compile Include="entities\AsteroidPool.cs" />
+    <Compile Include="entities\Player.cs" />
+    <Compile Include="entities\Laser.cs" />
+    <Compile Include="entities\LaserPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

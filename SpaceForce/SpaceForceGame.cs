@@ -1,24 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceForce.Desktop.entities;
+using Microsoft.Xna.Framework.Media;
+
+/**
+ * 
+ * Space Shooter graphics by Kenney Vleugels (www.kenney.nl)
+ * Song: (DL Sounds) https://www.dl-sounds.com/royalty-free/sci-fi-pulse-loop/
+ * Sound: Laser shot (peepholecircus) https://freesound.org/people/peepholecircus/sounds/169989/
+ * 
+ */
 
 namespace SpaceForce.Desktop {
 	public class SpaceForceGame : Game {
 
 		internal GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
+		private Song song;
 		private int cleanupCounter = 0;
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
 		private AsteroidPool asteroidPool;
+		private LaserPool laserPool;
+		private Player player;
     
 		public SpaceForceGame() {
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			asteroidPool = new AsteroidPool(this);
+			laserPool = new LaserPool(this);
 		}
 
 		protected override void Initialize() {
@@ -32,24 +44,28 @@ namespace SpaceForce.Desktop {
 		private void LoadTextures() {
 			LoadTexture("Background/starBackground");
 			LoadTexture("player");
+			LoadTexture("playerLeft");
+			LoadTexture("playerRight");
 			LoadTexture("meteorSmall");
-
-			// TEMP
-			//Asteroid asteroid = new Asteroid(this);
-			//asteroid.SetState(new Vector2(0), new Vector2(0.3f), new Vector2(0), 0f, 0.05f);
-			//asteroids.Add(asteroid);
-
+			LoadTexture("laserRed");
+			LoadTexture("laserGreen");
+   
 			for (int i = 0; i < 10; i++) {
 				asteroidPool.New();
 			}
+
+			player = new Player(this, laserPool);
+      player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
 		}
-
-
+    
 		protected override void LoadContent() {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			LoadTextures();
+			this.song = Content.Load<Song>("Sci-fi Pulse Loop");
+			MediaPlayer.Play(song);
+			MediaPlayer.IsRepeating = true;
 		}
-
+  
 		protected override void UnloadContent() {
 		}
 
@@ -64,7 +80,9 @@ namespace SpaceForce.Desktop {
 				return;
 			}
 
+			player.Update(gameTime);
 			asteroidPool.Update(gameTime);
+			laserPool.Update(gameTime);
 			cleanupCounter++;
       
 			if (cleanupCounter > 100) {
@@ -75,23 +93,13 @@ namespace SpaceForce.Desktop {
 			base.Update(gameTime);
 		}
 
-
-
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin();
-			/*
-				  spriteBatch.Draw(textures["Background/starBackground"], new Rectangle(0, 0, 800, 480), Color.White);
-				  spriteBatch.Draw(textures["player"], new Vector2(400, 240), Color.White);
-
-				  Texture2D asteroid = textures["meteorSmall"];
-
-				  Rectangle sourceRectangle = new Rectangle(0, 0, asteroid.Width, asteroid.Height);
-				  spriteBatch.Draw(asteroid, new Vector2(450, 240), sourceRectangle, Color.White, angle, new Vector2(0 + asteroid.Width / 2, 0 + asteroid.Height / 2), 1.0f, SpriteEffects.None, 1);
-			*/
-
+	   
 			asteroidPool.Draw(gameTime, spriteBatch);
-
+			laserPool.Draw(gameTime, spriteBatch);
+			player.Draw(gameTime, spriteBatch);
 
 			spriteBatch.End();
 			base.Draw(gameTime);
