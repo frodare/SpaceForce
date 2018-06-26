@@ -7,21 +7,33 @@ namespace SpaceForce.Desktop {
 
 		private Random rand = new Random();
 
-		protected override Asteroid NewInstance(SpaceForceGame game) {
-      return new Asteroid(game);
-    }
+		public AsteroidPool(SpaceForceGame game) : base(game) {
+		}
 
-		protected override void Init (SpaceForceGame game, Asteroid asteroid) {
+		protected override Asteroid NewInstance() {
+			return new Asteroid(game);
+		}
+
+		protected override void Init(Asteroid asteroid) {
+			asteroid.Dead = false;
 			asteroid.SetState(RandomPostion(game), RandomVeclocity(), new Vector2(0), 0, RandomRotation());
-    }
+		}
+
+		public void respawnDead() {
+			foreach (Asteroid asteroid in pool) {
+				if (asteroid.Dead) {
+					Init(asteroid);
+				}
+			}
+		}
 
 		private float RandomRotation() {
-			return (float) rand.NextDouble() / 10;
+			return ((float)rand.NextDouble() - 0.5f) / 10f;
 		}
 
 		private Vector2 RandomVeclocity() {
-			float x = (float) rand.NextDouble() - 0.5f;
-			float y = (float) rand.NextDouble();
+			float x = (float)rand.NextDouble() - 0.5f;
+			float y = (float)rand.NextDouble() * 2;
 			return new Vector2(x, y);
 		}
 

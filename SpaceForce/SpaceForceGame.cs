@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,13 +10,15 @@ namespace SpaceForce.Desktop {
 
 		internal GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
+		private int cleanupCounter = 0;
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
-		AsteroidPool asteroidPool = new AsteroidPool();
+		private AsteroidPool asteroidPool;
     
 		public SpaceForceGame() {
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+			asteroidPool = new AsteroidPool(this);
 		}
 
 		protected override void Initialize() {
@@ -37,7 +40,7 @@ namespace SpaceForce.Desktop {
 			//asteroids.Add(asteroid);
 
 			for (int i = 0; i < 10; i++) {
-				asteroidPool.New(this);
+				asteroidPool.New();
 			}
 		}
 
@@ -62,9 +65,17 @@ namespace SpaceForce.Desktop {
 			}
 
 			asteroidPool.Update(gameTime);
+			cleanupCounter++;
+      
+			if (cleanupCounter > 100) {
+        cleanupCounter = 0;
+				asteroidPool.respawnDead();
+      }
 
 			base.Update(gameTime);
 		}
+
+
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);

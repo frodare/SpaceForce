@@ -50,7 +50,7 @@ namespace SpaceForce.Desktop.entities {
 			spriteBatch.Draw(texture, pos, size, Color.White, rot, origin, 1.0f, SpriteEffects.None, 1);
 		}
 
-		public void Update(GameTime gameTime) {
+		public virtual void Update(GameTime gameTime) {
 			if (Dead) {
         return;
       }
@@ -58,5 +58,6 @@ namespace SpaceForce.Desktop.entities {
 			pos += vel;
 			rot += rotVel;
 		}
+
 	}
 }

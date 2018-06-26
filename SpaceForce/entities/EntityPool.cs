@@ -6,15 +6,20 @@ using Microsoft.Xna.Framework.Graphics;
 namespace SpaceForce.Desktop.entities {
 	public abstract class EntityPool<T> where T: Entity {
     
-		List<T> pool = new List<T>();
+		protected List<T> pool = new List<T>();
+		protected SpaceForceGame game;
+    
+		public EntityPool(SpaceForceGame game) {
+			this.game = game;
+		}
 
-		public T New(SpaceForceGame game) {
+		public T New() {
 			T entity = GetExisting();
 			if (entity == null) {
-				entity = NewInstance(game);
+				entity = NewInstance();
 				pool.Add(entity);
 			}
-			Init(game, entity);
+			Init(entity);
 			return entity;
 		}
 
@@ -26,12 +31,12 @@ namespace SpaceForce.Desktop.entities {
       }
 			return null;
 		}
-
-		protected virtual void Init(SpaceForceGame game, T entity) {
+    
+		protected virtual void Init(T entity) {
 
 		}
 
-		protected abstract T NewInstance(SpaceForceGame game);
+		protected abstract T NewInstance();
 
 		public void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
 			foreach(var entity in pool) {
