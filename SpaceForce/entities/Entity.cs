@@ -81,13 +81,6 @@ namespace SpaceForce.Desktop.entities {
 				return;
 			}
 			spriteBatch.Draw(textures[textureIndex], pos, textureSize, Color.White, rot, origin, 1.0f, SpriteEffects.None, 1);
-
-			spriteBatch.Draw(game.spot, pos, Color.White);
-
-			spriteBatch.Draw(game.spot, pos + new Vector2(size / 2, 0), Color.White);
-			spriteBatch.Draw(game.spot, pos + new Vector2(-size / 2, 0), Color.White);
-			spriteBatch.Draw(game.spot, pos + new Vector2(0, size / 2), Color.White);
-			spriteBatch.Draw(game.spot, pos + new Vector2(0, -size / 2), Color.White);
 		}
 
 		public virtual void Update(GameTime gameTime) {

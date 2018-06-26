@@ -10,7 +10,7 @@ namespace SpaceForce.Desktop {
 		private int NumberOnScreen { set; get; }
 
 		public AsteroidPool(SpaceForceGame game) : base(game) {
-			NumberOnScreen = 10;
+			NumberOnScreen = 50;
 		}
 
 		protected override Asteroid NewInstance() {

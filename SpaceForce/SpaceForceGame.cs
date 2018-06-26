@@ -22,6 +22,7 @@ namespace SpaceForce.Desktop {
 		private SpriteBatch spriteBatch;
 		private Song song;
 		private int cleanupCounter = 0;
+		public Random rand = new Random();
 
 		private List<Entity> entities = new List<Entity>();
 		private List<Entity> newEntities = new List<Entity>();
@@ -32,9 +33,7 @@ namespace SpaceForce.Desktop {
 		internal AsteroidPool asteroidPool;
 		internal LaserPool laserPool;
 		internal Player player;
-
-		public Texture2D spot;
-
+  
 		public void RegisterEntity(Entity e) {
 			newEntities.Add(e);
 		}
@@ -64,13 +63,7 @@ namespace SpaceForce.Desktop {
 			LoadTexture("laserRed");
 			LoadTexture("laserGreen");
 
-			spot = CreateCircleText(3);
-   
 			sounds.Add("laser", Content.Load<SoundEffect>("laser"));
-
-			for (int i = 0; i < 10; i++) {
-				asteroidPool.New();
-			}
 
 			player = new Player(this, laserPool);
 			entities.Add(player);
@@ -105,7 +98,7 @@ namespace SpaceForce.Desktop {
       }
 			cleanupCounter++;
       
-			if (cleanupCounter > 100) {
+			if (cleanupCounter > 20) {
         cleanupCounter = 0;
 				asteroidPool.respawnDead();
       }
@@ -142,30 +135,6 @@ namespace SpaceForce.Desktop {
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
-
-
-		private Texture2D CreateCircleText(int radius) {
-      Texture2D texture = new Texture2D(GraphicsDevice, radius, radius);
-      Color[] colorData = new Color[radius * radius];
-
-      float diam = radius / 2f;
-      float diamsq = diam * diam;
-
-      for (int x = 0; x < radius; x++) {
-        for (int y = 0; y < radius; y++) {
-          int index = x * radius + y;
-          Vector2 pos = new Vector2(x - diam, y - diam);
-          if (pos.LengthSquared() <= diamsq) {
-            colorData[index] = Color.Red;
-          } else {
-            colorData[index] = Color.Transparent;
-          }
-        }
-      }
-
-      texture.SetData(colorData);
-      return texture;
-    }
 
 	}
 }
