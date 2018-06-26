@@ -8,6 +8,8 @@ namespace SpaceForce.Desktop.entities {
     
 		protected List<T> pool = new List<T>();
 		protected SpaceForceGame game;
+
+		protected int maxSize = 100;
     
 		public EntityPool(SpaceForceGame game) {
 			this.game = game;
@@ -16,11 +18,20 @@ namespace SpaceForce.Desktop.entities {
 		public T New() {
 			T entity = GetExisting();
 			if (entity == null) {
-				entity = NewInstance();
-				pool.Add(entity);
-				game.entities.Add(entity);
+				entity = create();
+			}
+			if (entity == null) {
+				return null;
 			}
 			Init(entity);
+			return entity;
+		}
+
+		private T create () {
+			if (pool.Count >= maxSize) return null;
+			T entity = NewInstance();
+      pool.Add(entity);
+      game.RegisterEntity(entity);
 			return entity;
 		}
 

@@ -15,6 +15,11 @@ namespace SpaceForce.Desktop.entities {
       base.Update(gameTime);
     }
 
+		public override void onCollide(Entity foreignEntity) {
+			if (object.ReferenceEquals(foreignEntity, game.player)) return;
+      Dead = true;
+    }
+
     protected override Texture2D[] GetTextures() {
 			return new Texture2D[] { game.textures["laserRed"], game.textures["laserGreen"] };
     }

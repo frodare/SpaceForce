@@ -29,10 +29,14 @@ namespace SpaceForce.Desktop.entities {
 
 		protected Entity(SpaceForceGame game) {
 			this.game = game;
+			SizeTexture();
+		}
+
+		protected void SizeTexture() {
 			textures = GetTextures();
-			Texture2D texture = textures[0];
-			textureSize = new Rectangle(0, 0, texture.Width, texture.Height);
-			origin = new Vector2(0 + texture.Width / 2, 0 + texture.Height / 2);
+      Texture2D texture = textures[textureIndex];
+      textureSize = new Rectangle(0, 0, texture.Width, texture.Height);
+      origin = new Vector2(0 + texture.Width / 2, 0 + texture.Height / 2);
 			SetSize(MathHelper.Max(textureSize.Bottom, textureSize.Width));
 		}
 

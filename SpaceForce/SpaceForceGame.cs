@@ -23,17 +23,21 @@ namespace SpaceForce.Desktop {
 		private Song song;
 		private int cleanupCounter = 0;
 
-		internal List<Entity> entities = new List<Entity>();
-    // TODO need to override add entity and queue new entities up until update is complete
+		private List<Entity> entities = new List<Entity>();
+		private List<Entity> newEntities = new List<Entity>();
 
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 		internal Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
-
-		private AsteroidPool asteroidPool;
-		private LaserPool laserPool;
-		private Player player;
+    
+		internal AsteroidPool asteroidPool;
+		internal LaserPool laserPool;
+		internal Player player;
 
 		public Texture2D spot;
+
+		public void RegisterEntity(Entity e) {
+			newEntities.Add(e);
+		}
     
 		public SpaceForceGame() {
 			graphics = new GraphicsDeviceManager(this);
@@ -56,6 +60,7 @@ namespace SpaceForce.Desktop {
 			LoadTexture("playerLeft");
 			LoadTexture("playerRight");
 			LoadTexture("meteorSmall");
+			LoadTexture("meteorBig");
 			LoadTexture("laserRed");
 			LoadTexture("laserGreen");
 
@@ -105,7 +110,14 @@ namespace SpaceForce.Desktop {
 				asteroidPool.respawnDead();
       }
 
+			InsertNewEntities();
+
 			base.Update(gameTime);
+		}
+
+		private void InsertNewEntities() {
+			entities.AddRange(newEntities);
+			newEntities.Clear();
 		}
 
 		private void HandleCollisions() {
