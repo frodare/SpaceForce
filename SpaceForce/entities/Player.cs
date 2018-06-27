@@ -11,15 +11,56 @@ namespace SpaceForce.Desktop.entities {
 		private LaserPool laserPool;
 		private bool triggerDown = false;
 
+		private Color iFrameColor = new Color(1f, 0.6f, 0.6f);
+    
+		private int iFrames = 0;
+
+		public int Life { get; set; }
+
 		public Player(SpaceForceGame game, LaserPool laserPool) : base(game) {
 			this.laserPool = laserPool;
+			Life = 5;
 		}
   
 		public override void Update(GameTime gameTime) {
+			DecIFrames();
 			Decel();
 			HandleControls();
 			base.Update(gameTime);
+			KeepOnScreen();
 		}
+
+		private void DecIFrames() {
+			if (iFrames > 0) {
+        iFrames--;
+				Collidable = false;
+				textureColor = (iFrames/2) % 2 == 0 ? iFrameColor : Color.White;
+      } else {
+        textureColor = Color.White;
+				Collidable = true;
+      }
+		}
+
+		private void KeepOnScreen() {
+      int w = game.graphics.GraphicsDevice.DisplayMode.Width;
+      int h = game.graphics.GraphicsDevice.DisplayMode.Height;
+
+			if (pos.X > w) {
+        pos.X = w;
+      }
+
+			if (pos.Y > h) {
+        pos.Y = h;
+      }
+
+			if (pos.Y < 0) {
+        pos.Y = 0;
+      }
+
+			if (pos.X < 0) {
+        pos.X = 0;
+      }
+    }
     
 		private void Decel() {
 			if (Math.Abs(vel.X) > float.Epsilon) {
@@ -39,6 +80,19 @@ namespace SpaceForce.Desktop.entities {
       }
 
 		}
+  
+		public override void onCollide(Entity foreignEntity) {
+			if (iFrames > 0) return;
+
+			if (foreignEntity.GetType() == typeof(Laser)) {
+        return;
+      }
+
+			iFrames = 20;
+      game.sounds["explosionHit"].Play(0.7f, 0, 0);
+			Life--;
+			System.Console.WriteLine("Life: " + Life);
+    }
 
 		private void HandleControls() {
 			KeyboardState state = Keyboard.GetState();

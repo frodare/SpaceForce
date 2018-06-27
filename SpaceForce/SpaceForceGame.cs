@@ -12,6 +12,8 @@ using System;
  * Space Shooter graphics by Kenney Vleugels (www.kenney.nl)
  * Song: (DL Sounds) https://www.dl-sounds.com/royalty-free/sci-fi-pulse-loop/
  * Sound: Laser shot (peepholecircus) https://freesound.org/people/peepholecircus/sounds/169989/
+ * https://freesound.org/people/juskiddink/sounds/108640/
+ * https://freesound.org/people/Veiler/sounds/264031/
  * 
  */
 
@@ -40,9 +42,17 @@ namespace SpaceForce.Desktop {
     
 		public SpaceForceGame() {
 			graphics = new GraphicsDeviceManager(this);
+			SetFullScreen();
 			Content.RootDirectory = "Content";
 			asteroidPool = new AsteroidPool(this);
 			laserPool = new LaserPool(this);
+		}
+
+		private void SetFullScreen() {
+			graphics.IsFullScreen = true;
+      graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+      graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+      graphics.ApplyChanges();
 		}
 
 		protected override void Initialize() {
@@ -50,32 +60,42 @@ namespace SpaceForce.Desktop {
 		}
 
 		private void LoadTexture(string name) {
-			textures.Add(name, Content.Load<Texture2D>(name));
-		}
+      textures.Add(name, Content.Load<Texture2D>(name));
+    }
+
+		private void LoadSound(string name) {
+			sounds.Add(name, Content.Load<SoundEffect>(name));
+    }
 
 		private void LoadTextures() {
-			LoadTexture("Background/starBackground");
-			LoadTexture("player");
-			LoadTexture("playerLeft");
-			LoadTexture("playerRight");
-			LoadTexture("meteorSmall");
-			LoadTexture("meteorBig");
-			LoadTexture("laserRed");
-			LoadTexture("laserGreen");
+      LoadTexture("Background/starBackground");
+      LoadTexture("player");
+      LoadTexture("playerLeft");
+      LoadTexture("playerRight");
+      LoadTexture("meteorSmall");
+      LoadTexture("meteorBig");
+      LoadTexture("laserRed");
+      LoadTexture("laserGreen");
+    }
 
-			sounds.Add("laser", Content.Load<SoundEffect>("laser"));
+		private void LoadSounds() {
+			LoadSound("explosionCrash");
+			LoadSound("explosionHit");
+      LoadSound("laser");
 
-			player = new Player(this, laserPool);
-			entities.Add(player);
-      player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
-		}
+			this.song = Content.Load<Song>("Sci-fi Pulse Loop");
+      MediaPlayer.Play(song);
+      MediaPlayer.IsRepeating = true;
+    }
     
 		protected override void LoadContent() {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			LoadTextures();
-			this.song = Content.Load<Song>("Sci-fi Pulse Loop");
-			MediaPlayer.Play(song);
-			MediaPlayer.IsRepeating = true;
+			LoadSounds();
+
+      player = new Player(this, laserPool);
+      entities.Add(player);
+      player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
 		}
   
 		protected override void UnloadContent() {
@@ -115,9 +135,9 @@ namespace SpaceForce.Desktop {
 
 		private void HandleCollisions() {
 			foreach (var e1 in entities) {
-				if (e1.Dead) continue;
+				if (e1.Dead || !e1.Collidable) continue;
 				foreach (var e2 in entities) {
-					if (e2.Dead || object.ReferenceEquals(e1, e2)) continue;
+					if (e2.Dead || !e2.Collidable || object.ReferenceEquals(e1, e2)) continue;
 					if (e1.isCollidingWith(e2)) {
 						e1.onCollide(e2);
 						e2.onCollide(e1);
@@ -128,7 +148,7 @@ namespace SpaceForce.Desktop {
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin();   
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);   
 			foreach (var e in entities) {
 				e.Draw(gameTime, spriteBatch);
 			}   

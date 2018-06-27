@@ -22,14 +22,17 @@ namespace SpaceForce.Desktop.entities {
 
 		protected SpaceForceGame game;
 		protected int textureIndex = 0;
+		protected Color textureColor = Color.White;
 
 		public bool Dead { get; set; }
+		public bool Collidable { get; set; }
 
 		protected abstract Texture2D[] GetTextures();
 
 		protected Entity(SpaceForceGame game) {
 			this.game = game;
 			SizeTexture();
+			Collidable = true;
 		}
 
 		protected void SizeTexture() {
@@ -80,7 +83,7 @@ namespace SpaceForce.Desktop.entities {
 			if (Dead) {
 				return;
 			}
-			spriteBatch.Draw(textures[textureIndex], pos, textureSize, Color.White, rot, origin, 1.0f, SpriteEffects.None, 1);
+			spriteBatch.Draw(textures[textureIndex], pos, textureSize, textureColor, rot, origin, 1.0f, SpriteEffects.None, 1);
 		}
 
 		public virtual void Update(GameTime gameTime) {

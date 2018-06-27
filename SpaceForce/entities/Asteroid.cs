@@ -36,8 +36,12 @@ namespace SpaceForce.Desktop.entities {
 			if (foreignEntity.GetType() == typeof(Asteroid) && IFrames > 0) {
 				return;
 			}
-
+      
 			Dead = true;
+
+			float volume = Mass == 2 ? 0.8f : 0.4f;
+
+			game.sounds["explosionCrash"].Play(volume, 0, 0);
 
 			if (Mass > 1) {
 				SpawnSmaller(pos);
