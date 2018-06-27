@@ -6,6 +6,7 @@ using SpaceForce.Desktop.entities;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using System;
+using SpaceForce.Desktop.gui;
 
 /**
  * 
@@ -35,6 +36,7 @@ namespace SpaceForce.Desktop {
 		internal AsteroidPool asteroidPool;
 		internal LaserPool laserPool;
 		internal Player player;
+		internal LifeGui lifeGui;
   
 		public void RegisterEntity(Entity e) {
 			newEntities.Add(e);
@@ -46,6 +48,7 @@ namespace SpaceForce.Desktop {
 			Content.RootDirectory = "Content";
 			asteroidPool = new AsteroidPool(this);
 			laserPool = new LaserPool(this);
+			lifeGui = new LifeGui(this);
 		}
 
 		private void SetFullScreen() {
@@ -69,7 +72,8 @@ namespace SpaceForce.Desktop {
 
 		private void LoadTextures() {
       LoadTexture("Background/starBackground");
-      LoadTexture("player");
+			LoadTexture("life");
+			LoadTexture("player");
       LoadTexture("playerLeft");
       LoadTexture("playerRight");
       LoadTexture("meteorSmall");
@@ -151,7 +155,8 @@ namespace SpaceForce.Desktop {
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);   
 			foreach (var e in entities) {
 				e.Draw(gameTime, spriteBatch);
-			}   
+			}
+			lifeGui.Draw(gameTime, spriteBatch);
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
