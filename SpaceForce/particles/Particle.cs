@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -8,46 +7,46 @@ using Microsoft.Xna.Framework;
 namespace SpaceForce.Desktop.particles {
 	public class Particle {
 
-		public Texture2D Texture;
-		public Vector2 Position;
-		public Vector2 Velocity;
-		public float Angle;
-		public float AngularVelocity;
-		public Color Color;
-		public float Size;
-		public int TTL;
+		private Texture2D _texture;
+		private Rectangle sourceRectangle;
+		private Vector2 origin;
 
+		public Texture2D Texture {
+			get => _texture;
+			set {
+				_texture = value;
+				MeasureTexture();
+			}
+		}
+
+		public Type type;
+		public Vector2 pos;
+		public Vector2 vel;
+		public float rot;
+		public float rotvel;
+		public Color color;
+		public float size;
+		public float sizevel;
+		public float opacity;
+		public float opacityvel;
+		public int life;
+  
 		public Particle() {
-			Position = new Vector2(0, 0);
-			Velocity = new Vector2(0, 0);
+			pos = new Vector2(0, 0);
+			vel = new Vector2(0, 0);
+			sourceRectangle = new Rectangle(0, 0, 0, 0);
+      origin = new Vector2(0, 0);
 		}
 
-		public void Init(Texture2D texture, float x, float y, float vx, float vy,
-      float angle, float angularVelocity, Color color, float size, int ttl) {
-			Texture = texture;
-			Position.X = x;
-			Position.Y = y;
-			Velocity.X = vx;
-			Velocity.Y = vy;
-      Angle = angle;
-      AngularVelocity = angularVelocity;
-      Color = color;
-      Size = size;
-      TTL = ttl;
+		private void MeasureTexture () {
+			sourceRectangle.Width = _texture.Width;
+			sourceRectangle.Height = _texture.Height;
+			origin.X = _texture.Width / 2;
+			origin.Y = _texture.Height / 2;
 		}
-
-		public void Update() {
-			TTL--;
-			Position += Velocity;
-			Angle += AngularVelocity;
-		}
-
+    
 		public void Draw(SpriteBatch spriteBatch) {
-			Rectangle sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
-			Vector2 origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
-
-			spriteBatch.Draw(Texture, Position, sourceRectangle, Color,
-				Angle, origin, Size, SpriteEffects.None, 0f);
+			spriteBatch.Draw(_texture, pos, sourceRectangle, color, rot, origin, size, SpriteEffects.None, 0f);
 		}
 	}
 

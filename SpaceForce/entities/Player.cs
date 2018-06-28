@@ -28,7 +28,7 @@ namespace SpaceForce.Desktop.entities {
 			HandleControls();
 			base.Update(gameTime);
 			KeepOnScreen();
-			game.particleEngine.EmitterLocation = pos;
+			//game.particleEngine.EmitterLocation = pos;
 		}
 
 		private void DecIFrames() {
@@ -110,9 +110,12 @@ namespace SpaceForce.Desktop.entities {
          
       if (state.IsKeyDown(Keys.Up)) {
         vel.Y = -PlayerSpeed;
+				game.particleEngine.EmitExhast(5, pos.X, pos.Y, 8);
       } else if (state.IsKeyDown(Keys.Down)) {
         vel.Y = PlayerSpeed;
-      }
+			} else {
+				game.particleEngine.EmitExhast(2, pos.X, pos.Y, 4);
+			}
 
 			if (state.IsKeyDown(Keys.Space)) {
 				if (!triggerDown) {

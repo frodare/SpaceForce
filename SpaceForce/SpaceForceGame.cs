@@ -100,7 +100,7 @@ namespace SpaceForce.Desktop {
 			textures.Add(Content.Load<Texture2D>("particles/circle"));
 			textures.Add(Content.Load<Texture2D>("particles/star"));
 			textures.Add(Content.Load<Texture2D>("particles/diamond"));
-      particleEngine = new ParticleEngine(textures, new Vector2(400, 240));
+			particleEngine = new ParticleEngine(textures, this);
 		}
     
 		protected override void LoadContent() {
@@ -168,18 +168,13 @@ namespace SpaceForce.Desktop {
 			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);   
 
-
+			asteroidPool.Draw(gameTime, spriteBatch);
 			particleEngine.Draw(spriteBatch);
-
-			//foreach (var e in entities) {
-			//	e.Draw(gameTime, spriteBatch);
-			//}
-
+   
 			laserPool.Draw(gameTime, spriteBatch);
 			player.Draw(gameTime, spriteBatch);
-			asteroidPool.Draw(gameTime, spriteBatch);
 
-
+     
 			lifeGui.Draw(gameTime, spriteBatch);
 
 			spriteBatch.End();
