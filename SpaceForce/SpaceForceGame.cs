@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using SpaceForce.Desktop.gui;
+using SpaceForce.Desktop.particles;
 
 /**
  * 
@@ -37,6 +38,8 @@ namespace SpaceForce.Desktop {
 		internal LaserPool laserPool;
 		internal Player player;
 		internal LifeGui lifeGui;
+
+		internal ParticleEngine particleEngine;
   
 		public void RegisterEntity(Entity e) {
 			newEntities.Add(e);
@@ -91,11 +94,20 @@ namespace SpaceForce.Desktop {
       MediaPlayer.Play(song);
       MediaPlayer.IsRepeating = true;
     }
+
+		private void LoadParticleEngine() {
+			List<Texture2D> textures = new List<Texture2D>();
+			textures.Add(Content.Load<Texture2D>("particles/circle"));
+			textures.Add(Content.Load<Texture2D>("particles/star"));
+			textures.Add(Content.Load<Texture2D>("particles/diamond"));
+      particleEngine = new ParticleEngine(textures, new Vector2(400, 240));
+		}
     
 		protected override void LoadContent() {
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			LoadTextures();
 			LoadSounds();
+			LoadParticleEngine();
 
       player = new Player(this, laserPool);
       entities.Add(player);
@@ -127,6 +139,8 @@ namespace SpaceForce.Desktop {
 				asteroidPool.respawnDead();
       }
 
+			particleEngine.Update();
+
 			InsertNewEntities();
 
 			base.Update(gameTime);
@@ -153,10 +167,21 @@ namespace SpaceForce.Desktop {
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);   
-			foreach (var e in entities) {
-				e.Draw(gameTime, spriteBatch);
-			}
+
+
+			particleEngine.Draw(spriteBatch);
+
+			//foreach (var e in entities) {
+			//	e.Draw(gameTime, spriteBatch);
+			//}
+
+			laserPool.Draw(gameTime, spriteBatch);
+			player.Draw(gameTime, spriteBatch);
+			asteroidPool.Draw(gameTime, spriteBatch);
+
+
 			lifeGui.Draw(gameTime, spriteBatch);
+
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}

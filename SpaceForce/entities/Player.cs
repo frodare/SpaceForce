@@ -28,6 +28,7 @@ namespace SpaceForce.Desktop.entities {
 			HandleControls();
 			base.Update(gameTime);
 			KeepOnScreen();
+			game.particleEngine.EmitterLocation = pos;
 		}
 
 		private void DecIFrames() {

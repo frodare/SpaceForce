@@ -54,6 +54,8 @@
     <Compile Include="entities\LaserPool.cs" />
     <Compile Include="gui\LifeGui.cs" />
     <Compile Include="gui\Gui.cs" />
+    <Compile Include="particles\Particle.cs" />
+    <Compile Include="particles\ParticleEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -117,6 +119,7 @@
   <ItemGroup>
     <Folder Include="entities\" />
     <Folder Include="gui\" />
+    <Folder Include="particles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

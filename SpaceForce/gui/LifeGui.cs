@@ -14,7 +14,7 @@ namespace SpaceForce.Desktop.gui {
 			Vector2 offset = new Vector2(0, 0);
 			for (int i = 0; i < game.player.Life; i++) {
 				spriteBatch.Draw(game.textures["life"], pos + offset, Color.White);
-				offset += new Vector2(100f, 0f);
+				offset += new Vector2(50f, 0f);
 			}
 		}
   }
