@@ -59,6 +59,7 @@
     <Compile Include="particles\handlers\ExhastHandler.cs" />
     <Compile Include="particles\handlers\TypeHandler.cs" />
     <Compile Include="particles\handlers\RainbowHandler.cs" />
+    <Compile Include="particles\handlers\AsteroidFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

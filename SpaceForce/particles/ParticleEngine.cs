@@ -8,7 +8,7 @@ using SpaceForce.Desktop.particles.handlers;
 
 namespace SpaceForce.Desktop.particles {
 
-	public enum Type {Rainbow, Exhast}
+	public enum Type {Rainbow, Exhast, AsteroidFragment}
 
 	public class ParticleEngine {
 		
@@ -20,6 +20,7 @@ namespace SpaceForce.Desktop.particles {
 
 		public ExhastHandler exhastHandler;
 		public RainbowHandler rainbowHandler;
+		public AsteroidFragment asteroidFragmentHandler;
 
 		public ParticleEngine(List<Texture2D> textures, SpaceForceGame game) {
 			this.game = game;
@@ -28,11 +29,16 @@ namespace SpaceForce.Desktop.particles {
 			this.dead = new LinkedList<Particle>();
 			exhastHandler = new ExhastHandler(game, textures);
       rainbowHandler = new RainbowHandler(game, textures);
+			asteroidFragmentHandler = new AsteroidFragment(game);
 		}
 
 		public void EmitExhast(int count, float x, float y, float vy) {
       for (int i = 0; i < count; i++) exhastHandler.Init(GetParticleInstance(), x, y, vy);
-		}
+    }
+
+		public void EmitAsteriodExplosion(int count, float x, float y, float vx, float vy) {
+			for (int i = 0; i < count; i++) asteroidFragmentHandler.Init(GetParticleInstance(), x, y, vx, vy);
+    }
 
    
 		public void Update() {
@@ -73,6 +79,7 @@ namespace SpaceForce.Desktop.particles {
 			switch (type) {
         case Type.Exhast: return exhastHandler;
         case Type.Rainbow: return rainbowHandler;
+				case Type.AsteroidFragment: return asteroidFragmentHandler;
       }
 			return null;
 		}

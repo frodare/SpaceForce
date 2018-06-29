@@ -37,6 +37,8 @@ namespace SpaceForce.Desktop.entities {
       
 			Dead = true;
 
+			game.particleEngine.EmitAsteriodExplosion(Mass > 1 ? 15 : 8, pos.X, pos.Y, vel.X, vel.Y);
+
 			float volume = Mass == 2 ? 0.8f : 0.4f;
 
 			game.sounds["explosionCrash"].Play(volume, 0, 0);
