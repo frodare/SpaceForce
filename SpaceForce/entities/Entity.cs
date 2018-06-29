@@ -18,6 +18,7 @@ namespace SpaceForce.Desktop.entities {
 		public float rot;
 
 		public int size;
+		public float scale = 1f;
 		public double sqHalfSize;
 
 		protected SpaceForceGame game;
@@ -83,7 +84,7 @@ namespace SpaceForce.Desktop.entities {
 			if (Dead) {
 				return;
 			}
-			spriteBatch.Draw(textures[textureIndex], pos, textureSize, textureColor, rot, origin, 1.0f, SpriteEffects.None, 1);
+			spriteBatch.Draw(textures[textureIndex], pos, textureSize, textureColor, rot, origin, scale, SpriteEffects.None, 1);
 		}
 
 		public virtual void Update(GameTime gameTime) {

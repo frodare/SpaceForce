@@ -13,6 +13,7 @@ namespace SpaceForce.Desktop.particles {
 	public class ParticleEngine {
 		
 		private SpaceForceGame game;
+		private Random random = new Random();
 
 		private LinkedList<Particle> particles;
 		private LinkedList<Particle> dead;
@@ -33,17 +34,22 @@ namespace SpaceForce.Desktop.particles {
 		}
 
 		public void EmitExhast(int count, float x, float y, float vy) {
-      for (int i = 0; i < count; i++) exhastHandler.Init(GetParticleInstance(), x, y, vy);
+      for (int i = 0; i < count; i++) exhastHandler.Init(GetParticleInstance(), x, y, 0, 3f);
     }
+
+		private float randomDistance(float max) {
+			return max * (float)(random.NextDouble() * 2 - 1);
+		}
 
 		public void EmitAsteriodExplosion(int count, float x, float y, float vx, float vy) {
-			for (int i = 0; i < count; i++) asteroidFragmentHandler.Init(GetParticleInstance(), x, y, vx, vy);
+			for (int i = 0; i < count - (count/2); i++) asteroidFragmentHandler.Init(GetParticleInstance(), x, y, vx, vy);
+			for (int i = 0; i < count + (count/2); i++) {
+				exhastHandler.Init(GetParticleInstance(), x + randomDistance(10 + count), y + randomDistance(10 + count), vx, vy);
+			}
     }
 
-   
 		public void Update() {
 			
-      
 			LinkedListNode<Particle> current = particles.First;
 			LinkedListNode<Particle> next;
 

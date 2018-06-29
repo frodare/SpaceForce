@@ -24,10 +24,8 @@ namespace SpaceForce.Desktop.particles.handlers {
 
 			particle.color = Color.White;
 
-			particle.color *= 1f;
+			particle.color *= 0.8f;
 
-      particle.opacity = 1f;
-      particle.opacityvel = 0;
 
 			particle.size = (float) (random.NextDouble() + 0.5) / 3;
 			particle.life = 60 + random.Next(40);

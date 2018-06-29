@@ -60,6 +60,8 @@
     <Compile Include="particles\handlers\TypeHandler.cs" />
     <Compile Include="particles\handlers\RainbowHandler.cs" />
     <Compile Include="particles\handlers\AsteroidFragment.cs" />
+    <Compile Include="entities\BackgroundEntity.cs" />
+    <Compile Include="entities\BackgroundPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

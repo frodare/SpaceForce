@@ -34,10 +34,14 @@ namespace SpaceForce.Desktop {
 		internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 		internal Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
     
+		internal BackgroundPool backgroundPool;
 		internal AsteroidPool asteroidPool;
 		internal LaserPool laserPool;
 		internal Player player;
 		internal LifeGui lifeGui;
+
+		private Vector2 backgroundOffset = new Vector2(0, 0);
+		private Rectangle backgroundSize;
 
 		internal ParticleEngine particleEngine;
   
@@ -50,6 +54,7 @@ namespace SpaceForce.Desktop {
 			SetFullScreen();
 			Content.RootDirectory = "Content";
 			asteroidPool = new AsteroidPool(this);
+			backgroundPool = new BackgroundPool(this);
 			laserPool = new LaserPool(this);
 			lifeGui = new LifeGui(this);
 		}
@@ -109,6 +114,9 @@ namespace SpaceForce.Desktop {
 			LoadSounds();
 			LoadParticleEngine();
 
+			backgroundSize = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height + textures["Background/starBackground"].Height);
+			backgroundOffset.Y = -textures["Background/starBackground"].Height;
+
       player = new Player(this, laserPool);
       entities.Add(player);
       player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
@@ -127,7 +135,8 @@ namespace SpaceForce.Desktop {
 				Exit();
 				return;
 			}
-   
+
+			UpdateBackground();
 			HandleCollisions();
 			foreach (var e in entities) {
         e.Update(gameTime);
@@ -137,6 +146,7 @@ namespace SpaceForce.Desktop {
 			if (cleanupCounter > 20) {
         cleanupCounter = 0;
 				asteroidPool.respawnDead();
+				backgroundPool.respawnDead();
       }
 
 			particleEngine.Update();
@@ -144,6 +154,13 @@ namespace SpaceForce.Desktop {
 			InsertNewEntities();
 
 			base.Update(gameTime);
+		}
+
+		private void UpdateBackground() {
+			backgroundOffset.Y += 2;
+      if (backgroundOffset.Y > 0) {
+				backgroundOffset.Y = -textures["Background/starBackground"].Height;
+      }
 		}
 
 		private void InsertNewEntities() {
@@ -166,8 +183,11 @@ namespace SpaceForce.Desktop {
 
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);   
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap);   
+      
+			spriteBatch.Draw(textures["Background/starBackground"], backgroundOffset, backgroundSize, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 
+			backgroundPool.Draw(gameTime, spriteBatch);
 			asteroidPool.Draw(gameTime, spriteBatch);
 			particleEngine.Draw(spriteBatch);
    

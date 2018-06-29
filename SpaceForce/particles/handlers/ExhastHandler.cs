@@ -14,12 +14,12 @@ namespace SpaceForce.Desktop.particles {
 			this.game = game;
     }
 
-		public void Init(Particle particle, float x, float y, float vy) {
+		public void Init(Particle particle, float x, float y, float vx, float vy) {
 			particle.type = Type.Rainbow;
 			particle.Texture = textures[0];
       particle.pos.X = x;
       particle.pos.Y = y;
-			particle.vel.X = 1f * (float)(random.NextDouble() * 2 - 1) * 3f;
+			particle.vel.X = 1f * (float)(random.NextDouble() * 2 - 1) + vx;
 			particle.vel.Y = 1f * (float)(random.NextDouble() * 2 - 1) + vy;
       particle.rotvel = 0.1f * (float)(random.NextDouble() * 2 - 1);
       particle.sizevel = 0.09f;
