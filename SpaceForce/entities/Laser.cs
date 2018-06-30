@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace SpaceForce.Desktop.entities {
 	public class Laser: Entity {
 		public Laser(SpaceForceGame game) : base(game) {
-			vel = new Vector2(0, -12f);
 			SetSize(6);
     }
 

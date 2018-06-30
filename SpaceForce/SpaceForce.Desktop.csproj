@@ -63,6 +63,7 @@
     <Compile Include="entities\BackgroundEntity.cs" />
     <Compile Include="entities\BackgroundPool.cs" />
     <Compile Include="entities\EnemyShip.cs" />
+    <Compile Include="entities\EnemyShipPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

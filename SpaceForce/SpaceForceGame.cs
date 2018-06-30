@@ -45,7 +45,7 @@ namespace SpaceForce.Desktop {
 
 		internal ParticleEngine particleEngine;
 
-		private EnemyShip enemy;
+		private EnemyShipPool enemyShipPool;
   
 		public void RegisterEntity(Entity e) {
 			newEntities.Add(e);
@@ -57,6 +57,7 @@ namespace SpaceForce.Desktop {
 			Content.RootDirectory = "Content";
 			asteroidPool = new AsteroidPool(this);
 			backgroundPool = new BackgroundPool(this);
+			enemyShipPool = new EnemyShipPool(this);
 			laserPool = new LaserPool(this);
 			lifeGui = new LifeGui(this);
 			SoundEffect.MasterVolume = 0.1f;
@@ -121,12 +122,14 @@ namespace SpaceForce.Desktop {
 
 			backgroundSize = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height + textures["Background/starBackground"].Height);
 			backgroundOffset.Y = -textures["Background/starBackground"].Height;
-
+      
       player = new Player(this, laserPool);
       entities.Add(player);
       player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
-
-			enemy = new EnemyShip(this);
+   
+			for (int i = 0; i < 10; i++) {
+				enemyShipPool.New();
+			}
 		}
   
 		protected override void UnloadContent() {
@@ -158,7 +161,7 @@ namespace SpaceForce.Desktop {
 
 			particleEngine.Update();
 
-			enemy.Update(gameTime);
+			enemyShipPool.Update(gameTime);
 
 			InsertNewEntities();
 
@@ -203,8 +206,7 @@ namespace SpaceForce.Desktop {
 			laserPool.Draw(gameTime, spriteBatch);
 			player.Draw(gameTime, spriteBatch);
 
-			enemy.Draw(gameTime, spriteBatch);
-
+			enemyShipPool.Draw(gameTime, spriteBatch);   
      
 			lifeGui.Draw(gameTime, spriteBatch);
 

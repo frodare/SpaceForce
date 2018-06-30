@@ -14,12 +14,13 @@ namespace SpaceForce.Desktop.entities {
 		private Color iFrameColor = new Color(1f, 0.6f, 0.6f);
     
 		private int iFrames = 0;
-
+  
 		public int Life { get; set; }
 
 		public Player(SpaceForceGame game, LaserPool laserPool) : base(game) {
 			this.laserPool = laserPool;
 			Life = 5;
+			scale = 0.75f;
 		}
   
 		public override void Update(GameTime gameTime) {
@@ -130,6 +131,7 @@ namespace SpaceForce.Desktop.entities {
 		public void FireLaser() {
 			Laser laser = laserPool.New();
 			laser.pos = pos;
+			laser.vel.Y = -12f;
 		}
 
 		protected override Texture2D[] GetTextures() {
