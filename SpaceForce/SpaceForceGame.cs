@@ -44,6 +44,8 @@ namespace SpaceForce.Desktop {
 		private Rectangle backgroundSize;
 
 		internal ParticleEngine particleEngine;
+
+		private EnemyShip enemy;
   
 		public void RegisterEntity(Entity e) {
 			newEntities.Add(e);
@@ -57,6 +59,8 @@ namespace SpaceForce.Desktop {
 			backgroundPool = new BackgroundPool(this);
 			laserPool = new LaserPool(this);
 			lifeGui = new LifeGui(this);
+			SoundEffect.MasterVolume = 0.1f;
+			MediaPlayer.Volume = 0.1f;
 		}
 
 		private void SetFullScreen() {
@@ -87,7 +91,8 @@ namespace SpaceForce.Desktop {
       LoadTexture("meteorSmall");
       LoadTexture("meteorBig");
       LoadTexture("laserRed");
-      LoadTexture("laserGreen");
+			LoadTexture("laserGreen");
+			LoadTexture("enemyShip");
     }
 
 		private void LoadSounds() {
@@ -120,6 +125,8 @@ namespace SpaceForce.Desktop {
       player = new Player(this, laserPool);
       entities.Add(player);
       player.SetState(new Vector2(400, 400), Vector2.Zero, Vector2.Zero, 0, 0);
+
+			enemy = new EnemyShip(this);
 		}
   
 		protected override void UnloadContent() {
@@ -150,6 +157,8 @@ namespace SpaceForce.Desktop {
       }
 
 			particleEngine.Update();
+
+			enemy.Update(gameTime);
 
 			InsertNewEntities();
 
@@ -193,6 +202,8 @@ namespace SpaceForce.Desktop {
    
 			laserPool.Draw(gameTime, spriteBatch);
 			player.Draw(gameTime, spriteBatch);
+
+			enemy.Draw(gameTime, spriteBatch);
 
      
 			lifeGui.Draw(gameTime, spriteBatch);
