@@ -86,7 +86,7 @@ namespace SpaceForce.Desktop.entities {
 		public override void onCollide(Entity foreignEntity) {
 			if (iFrames > 0) return;
 
-			if (foreignEntity.GetType() == typeof(Laser)) {
+			if (foreignEntity.GetType() == typeof(Laser) && Object.ReferenceEquals(this, ((Laser)foreignEntity).shooter)) {
         return;
       }
 
@@ -132,6 +132,7 @@ namespace SpaceForce.Desktop.entities {
 			Laser laser = laserPool.New();
 			laser.pos = pos;
 			laser.vel.Y = -12f;
+			laser.shooter = this;
 		}
 
 		protected override Texture2D[] GetTextures() {

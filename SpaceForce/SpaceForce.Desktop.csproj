@@ -62,8 +62,12 @@
     <Compile Include="particles\handlers\AsteroidFragment.cs" />
     <Compile Include="entities\BackgroundEntity.cs" />
     <Compile Include="entities\BackgroundPool.cs" />
-    <Compile Include="entities\EnemyShip.cs" />
+    <Compile Include="entities\Enemy.cs" />
     <Compile Include="entities\EnemyShipPool.cs" />
+    <Compile Include="entities\ai\PursueAi.cs" />
+    <Compile Include="entities\ai\Ai.cs" />
+    <Compile Include="entities\ai\FleeAi.cs" />
+    <Compile Include="entities\ai\WaitAi.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -129,6 +133,7 @@
     <Folder Include="gui\" />
     <Folder Include="particles\" />
     <Folder Include="particles\handlers\" />
+    <Folder Include="entities\ai\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

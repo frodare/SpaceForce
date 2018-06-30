@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 
 namespace SpaceForce.Desktop.entities {
-	public class EnemyShipPool : EntityPool<EnemyShip> {
+	public class EnemyShipPool : EntityPool<Enemy> {
 
 		private Random rand = new Random();
 
@@ -10,13 +10,14 @@ namespace SpaceForce.Desktop.entities {
       
     }
 
-		protected override EnemyShip NewInstance() {
-			return new EnemyShip(game);
+		protected override Enemy NewInstance() {
+			return new Enemy(game);
     }
 
-		protected override void Init(EnemyShip e) {
+		protected override void Init(Enemy e) {
       e.Dead = false;
 			e.SetState(RandomPostion(game), Vector2.Zero, Vector2.Zero, 0, 0);
+			e.Mode = Mode.Wait;
     }
     
 		private Vector2 RandomPostion(SpaceForceGame game) {

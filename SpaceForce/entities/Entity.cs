@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,19 +22,34 @@ namespace SpaceForce.Desktop.entities {
 		public float scale = 1f;
 		public double sqHalfSize;
 
-		protected SpaceForceGame game;
+		public SpaceForceGame game;
 		protected int textureIndex = 0;
 		protected Color textureColor = Color.White;
+
+
+		public Random rand;
 
 		public bool Dead { get; set; }
 		public bool Collidable { get; set; }
 
 		protected abstract Texture2D[] GetTextures();
 
+		public virtual void Attack() {
+
+		}
+
 		protected Entity(SpaceForceGame game) {
 			this.game = game;
 			SizeTexture();
 			Collidable = true;
+			SetupRand();
+		}
+
+		private void SetupRand() {
+			var rncCsp = new RNGCryptoServiceProvider();
+      byte[] salt = new byte[4];
+      rncCsp.GetBytes(salt);
+      rand = new Random(BitConverter.ToInt32(salt, 0));
 		}
 
 		protected void SizeTexture() {

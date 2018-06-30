@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceForce.Desktop.entities {
 	public class Laser: Entity {
+
+		public Entity shooter;
+
 		public Laser(SpaceForceGame game) : base(game) {
 			SetSize(6);
     }
@@ -15,8 +18,9 @@ namespace SpaceForce.Desktop.entities {
     }
 
 		public override void onCollide(Entity foreignEntity) {
-			if (object.ReferenceEquals(foreignEntity, game.player)) return;
+			if (shooter != null && object.ReferenceEquals(foreignEntity, shooter)) return;
       Dead = true;
+			shooter = null;
     }
 
     protected override Texture2D[] GetTextures() {
