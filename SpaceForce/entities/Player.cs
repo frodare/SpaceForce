@@ -29,7 +29,17 @@ namespace SpaceForce.Desktop.entities {
 			HandleControls();
 			base.Update(gameTime);
 			KeepOnScreen();
-			//game.particleEngine.EmitterLocation = pos;
+			renderFireDamage();
+		}
+
+		private void renderFireDamage() {
+			if (Life == 3) {
+        game.particleEngine.EmitExhast(1, pos.X, pos.Y, 8);
+			} else if (Life == 2) {
+        game.particleEngine.EmitExhast(3, pos.X, pos.Y, 8);
+			} else if (Life == 1) {
+        game.particleEngine.EmitExhast(10, pos.X, pos.Y, 8);
+      }
 		}
 
 		private void DecIFrames() {
@@ -93,7 +103,12 @@ namespace SpaceForce.Desktop.entities {
 			iFrames = 20;
       game.sounds["explosionHit"].Play(0.7f, 0, 0);
 			Life--;
-			System.Console.WriteLine("Life: " + Life);
+
+			if (Life < 1) {
+				game.particleEngine.EmitAsteriodExplosion(50, pos.X, pos.Y, vel.X, vel.Y);
+				game.sounds["explosionHit"].Play(1f, 0, 0);
+				Dead = true;
+			}
     }
 
 		private void HandleControls() {
@@ -110,12 +125,9 @@ namespace SpaceForce.Desktop.entities {
       }
          
       if (state.IsKeyDown(Keys.Up)) {
-        vel.Y = -PlayerSpeed;
-				game.particleEngine.EmitExhast(5, pos.X, pos.Y, 8);
+				vel.Y = -PlayerSpeed;
       } else if (state.IsKeyDown(Keys.Down)) {
         vel.Y = PlayerSpeed;
-			} else {
-				game.particleEngine.EmitExhast(2, pos.X, pos.Y, 4);
 			}
 
 			if (state.IsKeyDown(Keys.Space)) {
