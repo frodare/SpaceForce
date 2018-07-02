@@ -67,7 +67,8 @@
     <Compile Include="entities\ai\PursueAi.cs" />
     <Compile Include="entities\ai\Ai.cs" />
     <Compile Include="entities\ai\FleeAi.cs" />
-    <Compile Include="entities\ai\WaitAi.cs" />
+    <Compile Include="entities\ai\AvoidAi.cs" />
+    <Compile Include="entities\ai\AiStack.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

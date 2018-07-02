@@ -17,7 +17,7 @@ namespace SpaceForce.Desktop.entities {
 		protected override void Init(Enemy e) {
       e.Dead = false;
 			e.SetState(RandomPostion(game), Vector2.Zero, Vector2.Zero, 0, 0);
-			e.Mode = Mode.Wait;
+			//e.Mode = Mode.Wait;
     }
     
 		private Vector2 RandomPostion(SpaceForceGame game) {

@@ -25,7 +25,7 @@ namespace SpaceForce.Desktop.entities {
 		public SpaceForceGame game;
 		protected int textureIndex = 0;
 		protected Color textureColor = Color.White;
-
+		public Entity target;
 
 		public Random rand;
 

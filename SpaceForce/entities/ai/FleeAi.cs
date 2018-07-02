@@ -3,23 +3,34 @@ using Microsoft.Xna.Framework;
 
 namespace SpaceForce.Desktop.entities.ai {
   public class FleeAi : Ai {
-
-    protected readonly Enemy thisEnemy;
-
+  
 		protected Vector2 fleeTo = new Vector2(0,0);
-		private bool initalized = false;
-
-		public FleeAi(Enemy entity) : base(entity) {
-      this.thisEnemy = entity;
+		public float maxSpeed = 5f;
+  
+		public FleeAi(Enemy entity, int prority) : base(entity, prority) {
     }
 
-		public override void Update(GameTime gameTime) {
-			if (!initalized) ChooseFleeTo();
+		public override bool ShouldExecute() {
+			return true;
+		}
+    
+		public override void Start() {
+			System.Console.WriteLine("Starting Flee");
+			ChooseFleeTo();
+		}
+
+		public override bool Update(GameTime gameTime) {
+			if ((entity.pos - fleeTo).LengthSquared() < 25) {
+				//thisEnemy.Mode = Mode.Wait;
+				//initalized = false;
+				entity.target = entity.game.player;
+        return false;
+      }
 			Flee();
+			return true;
     }
     
 		private void ChooseFleeTo() {
-			initalized = true;
 			int w = entity.game.graphics.GraphicsDevice.DisplayMode.Width;
       int x = entity.rand.Next(w);
 			fleeTo.X = x;
@@ -27,16 +38,9 @@ namespace SpaceForce.Desktop.entities.ai {
 		}
 
 		private void Flee() {
-			thisEnemy.vel = fleeTo - thisEnemy.pos;
-
-			if (thisEnemy.vel.LengthSquared() < 25) {
-				thisEnemy.Mode = Mode.Wait;
-				initalized = false;
-        return;
-      }
-
-			thisEnemy.vel.Normalize();
-			thisEnemy.vel *= thisEnemy.maxSpeed;
+			entity.vel = fleeTo - entity.pos;   
+			entity.vel.Normalize();
+			entity.vel *= maxSpeed;
     }
   }
 }
